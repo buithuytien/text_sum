@@ -1,6 +1,11 @@
 ./preprocessed/*
 preprocessed
-*.ipynb
+bert2bert.ipynb
+finetune_encoder_decoder2.ipynb
+test.ipynb
+Bert_RNNSummarizer.ipynb
+inference.ipynb
+trainer.ipynb
 models
 ./models/*
 __pycache__
