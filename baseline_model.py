@@ -4,8 +4,6 @@
 # In[1]:
 
 
-get_ipython().system('pip install rouge')
-get_ipython().system('pip install fastapi nest-asyncio pyngrok uvicorn')
 
 
 # In[2]:
@@ -21,7 +19,8 @@ from collections import Counter
 import random
 import re
 import numpy as np
-from rouge import Rouge
+from tensorboard import summary
+# from rouge import Rouge
 
 
 # In[ ]:
@@ -209,8 +208,8 @@ def train(content,n_gram):
 
 
 V = len(vocab)
-print(n_gram_counts)
-print(vocab)
+# print(n_gram_counts)
+# print(vocab)
 
 
 # In[8]:
@@ -286,7 +285,7 @@ def generate_summary(text, n_gram = 3):
     
     #create same for backward
     #create sentence 
-    return ' '.join(backward_sents + list(keyphrase) + forward_sents).replace(SENT_END,'').replace(SENT_BEGIN,'')                                    .replace(PAR_END,'').replace(PAR_BEGIN,'').strip()
+    return ' '.join(backward_sents + list(keyphrase) + forward_sents).replace(SENT_END,'').replace(SENT_BEGIN,'').replace(PAR_END,'').replace(PAR_BEGIN,'').strip()
     
 
 
@@ -299,71 +298,74 @@ def generate_summary(text, n_gram = 3):
 # In[396]:
 
 
-train_ds = pd.read_csv('train_sample.csv')
-train_ds['generated'] = train_ds['article'].map(generate_summary)
-rouge = Rouge()
-scores = rouge.get_scores(train_ds['generated'], train_ds['highlights'],avg=True)
+#train_ds = pd.read_csv('train_sample.csv')
+#train_ds['generated'] = train_ds['article'].map(generate_summary)
+#rouge = Rouge()
+#scores = rouge.get_scores(train_ds['generated'], train_ds['highlights'],avg=True)
 
 
 # In[398]:
 
 
-scores
+#scores
 
 
 # In[399]:
 
 
-val_ds = pd.read_csv('val_sample.csv')
-val_ds['generated'] = val_ds['article'].map(generate_summary)
-rouge = Rouge()
-scores = rouge.get_scores(val_ds['generated'], val_ds['highlights'],avg=True)
+#val_ds = pd.read_csv('val_sample.csv')
+#val_ds['generated'] = val_ds['article'].map(generate_summary)
+#rouge = Rouge()
+#scores = rouge.get_scores(val_ds['generated'], val_ds['highlights'],avg=True)
 
 
 # In[400]:
 
 
-scores
+#scores
 
 
 # In[401]:
 
 
-test_ds = pd.read_csv('test_sample.csv')
-test_ds['generated'] = test_ds['article'].map(generate_summary)
-rouge = Rouge()
-scores = rouge.get_scores(test_ds['generated'], test_ds['highlights'],avg=True)
-scores
+#test_ds = pd.read_csv('test_sample.csv')
+#test_ds['generated'] = test_ds['article'].map(generate_summary)
+#rouge = Rouge()
+#scores = rouge.get_scores(test_ds['generated'], test_ds['highlights'],avg=True)
+#scores
 
 
 # In[14]:
 
 
-train_ds = pd.read_csv('train_sample.csv')
-train_ds['generated'] = train_ds['article'].map(generate_summary)
+#train_ds = pd.read_csv('train_sample.csv')
+#train_ds['generated'] = train_ds['article'].map(generate_summary)
 
 
 # In[28]:
 
 
-train_ds['generated'][50]
+#train_ds['generated'][50]
 
 
 # In[29]:
 
 
-train_ds['highlights'][50]
+#train_ds['highlights'][50]
 
 
 # In[30]:
 
 
-train_ds['article'][50]
+#train_ds['article'][50]
 
 
 # In[12]:
 
 
+summary_result = generate_summary("This is a sample text")
+
+# print(summary_result)
 
 from fastapi import FastAPI
 import nest_asyncio
@@ -374,16 +376,17 @@ app = FastAPI()
 async def home(raw_text):
         summary_result = generate_summary(raw_text)
         return summary_result
-ngrok_tunnel = ngrok.connect(8000)
+
+
+ngrok_tunnel = ngrok.connect(8081)
 print('Public URL:', ngrok_tunnel.public_url)
 nest_asyncio.apply()
-uvicorn.run(app, port=8000)
+uvicorn.run(app, port=8081)
 
 
 # In[11]:
 
 
-generate_summary("this is a summary")
 
 
 # In[ ]:
