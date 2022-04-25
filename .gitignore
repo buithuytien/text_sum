@@ -1,0 +1,9 @@
+./preprocessed/*
+preprocessed
+*.ipynb
+models
+./models/*
+__pycache__
+rnn
+./rnn/*
+
