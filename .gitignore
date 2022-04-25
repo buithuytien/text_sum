@@ -7,3 +7,8 @@ __pycache__
 rnn
 ./rnn/*
 
+bert_test.py
+encoder_decoder2.ipynb
+preprocess.ipynb
+train2.ipynb
+
